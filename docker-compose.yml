@@ -1,0 +1,52 @@
+version: '3.9'
+
+
+
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - gormdb:/var/lib/postgresql/data
+    networks:
+    - go-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: cosmic-sword@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: )(*&^%$#@!
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - go-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    links:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 5432
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8081:80
+
+networks:
+  go-network:
+
+volumes:
+  gormdb:
+  pgadmin-data:
+
